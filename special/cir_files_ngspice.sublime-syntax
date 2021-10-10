@@ -1,0 +1,52 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/syntax.html
+name: Circuit
+file_extensions: [cir]
+scope: text.circuit
+variables:
+  identifier: \b[[:alpha:]_][[:alnum:]_]*\b # upper and lowercase
+contexts:
+  main: # aka first line
+    # Go to other lines at end of first line
+    - match: '$'
+      set: other.lines
+
+    # First line
+    - match: '.*'
+      scope: string.quoted.other.lt-gt.heading.circuit
+
+  other.lines:
+    # Comments begin with a '*' and finish at the end of the line
+    - match: '\*'
+      scope: punctuation.definition.comment.circuit
+      push: line_comment
+
+    # Keywords are if, else for and while.
+    # Note that blackslashes don't need to be escaped within single quoted
+    # strings in YAML. When using single quoted strings, only single quotes
+    # need to be escaped: this is done by using two single quotes next to each
+    # other.
+    - match: '\b(sin|pwl|pulse|dc|ac|plot|meas|phase|i|v|idb|vdb|vmag)\b'
+      scope: keyword.control.circuit
+
+    # Circuit elements
+    - match: '\b(r|c|l|d|q|j|m|v|i|e|f|g|h|x)([0-9.]+)\b'
+      scope: entity.name.element.circuit
+
+    # Circuit elements again
+    - match: '\b(r|c|l|d|q|j|m|v|i|e|f|g|h|x)\_\w*\b'
+      scope: entity.name.element.something
+
+    # Commands
+    - match: '\.\w*'
+      scope: string.quoted.other.lt-gt.heading.circuit
+
+    # Numbers with optional units
+    - match: '\b(-)?[0-9.]+(n|u|m|k|g)?\b'
+      scope: constant.numeric.circuit
+
+  line_comment:
+    - meta_scope: comment.line.circuit
+    - match: $
+      pop: true

@@ -1,0 +1,43 @@
+Clipper circuit
+
+.include Diode_1N914.txt
+* describe circuit
+* <element name> <nodes list> <value>
+* voltage_nodename positive_node negative_node dc_value/function
+    * v 1 0 5
+* sine voltage: sin(offset amplitude frequency time_delay damping_factor)
+    * v 1 0 sin(0 2 1k 0 0)
+* peicewise linear: pwl(time1 value1 time2 value2 ...)
+    * v 1 0 pwl(0 0 10m 0 11m 5 20m 5)
+* ac analysis: dc dc_val ac ac_val
+    * v 1 0 dc 0 ac 1
+r0 1 2 1k
+d0 2 3 1N914
+v2 3 0 2
+v1 1 0
+
+
+
+* dc analysis: dc node_name initial_value final_value step
+    * .dc v 0 5 0.1
+* transient analysis: tran timestep end_time
+    * .tran 10u 20m
+* ac analysis: ac lin/dec num_points start_freq end_freq
+    * .ac dec 10 1 1k
+.dc v1 -5 5 0.1
+
+* start control
+.control
+
+run
+
+* plot vdb(2); plots magnitude in dB
+* plot phase(v(2)); plots phase of v(2)
+* plot i(v); plots current through voltage_element v, only voltage elements allowed
+* use dummy voltage elements to measure current through all elements
+plot v(2)
+
+* end control
+.endc
+
+.end

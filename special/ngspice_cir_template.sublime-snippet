@@ -1,0 +1,61 @@
+<snippet>
+    <content><![CDATA[
+19D070052 Sheel Shah ${1:Title}
+.include all_model_files/Diode_1N914.txt
+
+* describe circuit
+* <element name> <nodes list> <value>
+* voltage_nodename positive_node negative_node dc_value/function
+    * v 1 0 5
+* sine voltage: sin(offset amplitude frequency time_delay damping_factor)
+    * v 1 0 sin(0 2 1k 0 0)
+* peicewise linear: pwl(time1 value1 time2 value2 ...)
+    * v 1 0 pwl(0 0 10m 0 11m 5 20m 5)
+* pulse waveform: pulse(initial-value pulsed-value delay_time rise_time fall_time pulse_width period)
+    * v 1 0 pulse(0 1 1m 1m 1m 6m 10m)
+* exponentioal waveform: exp(initial pulsed rise-delay rise-time fall-delay fall-time)
+    * v 1 0 exp(1 0 10m 10m 10m 10m)
+* ac analysis: dc dc_val ac ac_val
+    * v 1 0 dc 0 ac 1
+${2:* elements}
+
+
+
+* dc analysis: dc node_name initial_value final_value step
+    * .dc v 0 5 0.1
+* transient analysis: tran timestep end_time
+    * .tran 10u 20m
+* ac analysis: ac lin/dec num_points start_freq end_freq
+    * .ac dec 10 1 1k
+${3:* analysis}
+
+* start control
+.control
+
+run
+
+* plot vdb(2); plots magnitude in dB
+* plot phase(v(2)); plots phase of v(2)
+* plot i(v); plots current through voltage_element v, only voltage elements allowed
+* plot v(1) vs v(2); for output vs input
+* use dummy voltage elements to measure current through all elements
+${4:* plotting}
+
+* hardcopy filename.ps plotting_value
+* meas ac peak MAX vmag(3)
+* meas ac fpeak WHEN vmag(3)=peak 
+* let f3db = peak/sqrt(2)
+* meas ac f1 WHEN vmag(3)=f3db RISE=1      
+* meas ac f2 WHEN vmag(3)=f3db FALL=1
+
+* end control
+.endc
+
+.end
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>starter</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <scope>text.circuit</scope>
+    <description>Starter circuit template</description>
+</snippet>

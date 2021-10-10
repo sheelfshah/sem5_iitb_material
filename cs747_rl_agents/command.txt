@@ -1,0 +1,1 @@
+docker run -v "D:\drbha\main\sem5_iitb_material\cs747_rl_agents\solution_assignments:/host" --name "19d070052" -it docker.cse.iitb.ac.in/cs747

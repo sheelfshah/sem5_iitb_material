@@ -1,0 +1,7 @@
+a b c d
+0 0 1 1
+x y
+e AND a b
+f AND c d
+x XOR e f
+y AND e d

@@ -1,0 +1,9 @@
+{
+    "target": "terminus_exec",
+    "auto_close": true,
+
+    "title": "ngspice build",   
+    "shell_cmd": "ngspice \"$file\"",
+    "file_regex": "^[ ]*File \"(...*?)\", line ([0-9]*)",
+    "selector": "text.circuit",
+}
