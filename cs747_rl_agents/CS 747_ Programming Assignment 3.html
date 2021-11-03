@@ -1,0 +1,258 @@
+
+<!-- saved from url=(0092)https://www.cse.iitb.ac.in/~shivaram/teaching/cs747-a2021/pa-3/programming-assignment-3.html -->
+<html><script data-dapp-detection="">!function(){let e=!1;function n(){if(!e){const n=document.createElement("meta");n.name="dapp-detected",document.head.appendChild(n),e=!0}}if(window.hasOwnProperty("ethereum")){if(window.__disableDappDetectionInsertion=!0,void 0===window.ethereum)return;n()}else{var t=window.ethereum;Object.defineProperty(window,"ethereum",{configurable:!0,enumerable:!1,set:function(e){window.__disableDappDetectionInsertion||n(),t=e},get:function(){if(!window.__disableDappDetectionInsertion){const e=arguments.callee;e&&e.caller&&e.caller.toString&&-1!==e.caller.toString().indexOf("getOwnPropertyNames")||n()}return t}})}}();</script><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <link rel="stylesheet" type="text/css" href="./CS 747_ Programming Assignment 3_files/style.css">
+    <title>CS 747: Programming Assignment 3</title>
+  <style>
+    table, th, td {
+    border:1px solid black;
+    }
+  </style></head>
+  
+  <body>
+
+    <center>
+      <h2>
+	CS 747: Programming Assignment 3
+      </h2>
+      <h3>Total marks: 12</h3>
+      <h3>(Prepared by Debabrata and Ashish)</h3>
+    </center>
+
+    <p> As a part of this assignment, you will write code to learn
+      the <i>Mountain Car</i> task given as Example 9.2 by Sutton and
+      Barto (2018). We will use the OpenAI Gym environment for this
+      assignment. You will program Sarsa with linear function
+      approximation, record your results, and present your
+      interpretations.</p>
+
+    <p> Unlike the previous assignments, here we give you
+      a <a href="https://www.cse.iitb.ac.in/~shivaram/teaching/cs747-a2021/pa-3/cs747-pa-3-v1.tar.gz">code structure</a> (version 1). Please find
+      in-line comments in the files to implement the tasks. To run the
+      code on docker, first install the <code>gym</code>
+      and <code>pyglet</code> modules on the docker by
+      running <code>pip install gym</code> &amp; <code>pip install
+      pyglet</code>. Make sure your code runs correctly on the docker
+      container, otherwise you will not be awarded any marks for this
+      assignment.</p>
+
+    <p>You can go to
+    the <a href="https://gym.openai.com/docs/">documentation</a> of
+    OpenAI gym to get a fair amount of idea about how an agent must
+    interact with the <code>gym</code> environment.</p>
+
+
+<br>
+<h2>Mountain Car</h2>
+
+<ol>
+  <li>The Mountain Car task is briefly described <a href="https://gym.openai.com/envs/MountainCar-v0/">here</a>.</li>
+  <li>You should be able to implement an agent which can learn to escape the valley successfully and reach the flag. The <code>gym</code> environment will terminate the episode after 200 timesteps even if you are not able to reach the goal: that is, 200 is the maximum episode length.</li>
+  <br>
+  <center>
+  <img src="./CS 747_ Programming Assignment 3_files/mountain_car.gif" width="350" height="200/">
+  </center>
+  <br>
+  <li>As you might have noticed, here the state space is continuous.More formally the state of the car or agent can be denoted by a pair of real numbers (x,v), where x is the the position of the car in the one dimensional track and v is the curent velocity of the car.As per the implementation of the environment in OpenAI Gym x <span>&#8714;</span> [-1.2,0.6] and v <span>&#8714;</span> [-0.07,0.07].</li>
+  <li> And at each timestep the agent can choose to perform one of the three actions encoded as three integers 0,1 and 2.</li>
+  <center>
+  <table>
+    <tbody><tr>
+      <th>Num</th>
+      <th>Action</th>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td>Accelerate to the left.</td>
+
+
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>Don't accelerate.</td>
+
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Accelerate to the right.</td>
+    </tr>
+  </tbody></table>
+  </center>
+  <li>For each time step the agent gets a reward of -1 unless it has reached the flag on the top of the mountain, in which case a reward of 0 is awarded and the episode ends. Our objective is to minimise the number of timesteps required to escape the valley, whic is equivalent to maximising the long-term reward.</li>
+  <li>The agent starts at a position selected uniformly at random from [-0.6,-0.4]. The velocity of the agent at the start is 0.</li>
+  <li>Given all this, your task is to implement a Sarsa(0) agent that learns to escape from the valley in minimum number of timesteps, or to maximize the amount of reward you get in each episode. More specifically, for this assignment, you have two tasks at hand.</li>
+
+  </ol>
+
+  <h2>Task 1: "Tabular" Sarsa</h2>
+
+<p>Here your task is to discretise the state space in some way
+    (the way you see fit) so from the agent's point of view, the
+    "state" it sees is one of a finite number (although in reality,
+    the environment/simulator will still deal with real-valued state
+    vector). With a discrete state space, the agent can perform normal
+    Sarsa(0). However, think about it: tabular Sarsa(0) is a special
+    case of function approximation in which each state-action pair
+    activates a single Boolean feature. So, you will write your
+    tabular case in a form that can also be used in tandem with linear
+    function approximation (as in Task 2).</p>
+
+    In the code, you must fill out the
+    function <code>get_table_features</code> to return a feature vector
+    corresponding to a tabular representation. Given the state (x,v)
+    this function is expected to return the discretised state that
+    gets activated. It is up to you to decide what granularity of
+    discretisation works best. The other functions, related to
+    Sarsa(0), that you need to fill out are <code>sarsa_update</code>
+    and <code>choose_action</code>: note that you are dealing with a
+    linear representation: both updating and action selection must
+    work on the weight vector. In this task as well as the next, you
+    are expected to use constant learning and exploration rates. Tune
+    them so your agent is able to sucessfully able to escape from the
+    valley with less than 160 timesteps on average. You will be
+    awarded full marks for this task if your agent is able to get
+    reward (averaged over 100 episodes) of greater than -160.
+
+  <h2>
+    Task 2: Sarsa with Linear Function Approximation
+  </h2>
+
+<p>In this task, you are expected to come up with a feature vector
+that can perform better than a simple tabular representation as in
+Task 1. You can implement any reasonable approach: either standard
+ones such as tile coding or RBFs, or your own hand-designed ones. With
+such reasonable choices, you should be able to meet the requirement of
+this task, which is to complete the episode in fewer than 130 steps.</p>
+
+<p>For this task you need to fill the
+    function <code>get_better_features</code> which takes state (x,v) as
+    input and returns the representation of the state or the
+    features. The function you use to approximate Q will be linear in
+    the feature vector. With this you should be able to get an average
+    reward of (over 100 episodes) more than -130.</p>
+
+
+
+
+
+
+<h2>Code Layout</h2>
+
+
+The Code template given has following structure.
+
+<ul>
+
+<li>Most of the functions are filled.</li>
+
+<li>The class <code>sarsaAgent</code> holds all the implementation of
+the agent.The constructor of this class instantiates all the required
+hyperparamters and weights for the training.</li>
+
+<li>The <code>get_table_features</code> and <code>get_better_features</code> functions are described above.</li>
+
+<li>The <code>choose_action</code> function is expected to take state, current weights and epsilon
+  as arguments and return a valid action to take.</li>
+  
+<li><code>sarsa_update</code> function as the name suggests updates the Sarsa weights for Task 1 as well as Task 2. It takes appropriate arguments (more
+  details in the code).</li>
+  
+<li>The <code>save_weights</code> function saves the final weights for
+the tasks.</li>
+  
+<li>The <code>load_weights</code> function loads and returns the saved
+weights.</li>
+
+<li>The <code>train</code> function has to train the agent for a
+  certain number of episodes and obtain the data for plotting graphs
+  for the two tasks. Look at the comments in the code for more
+  details.</li>
+
+<li>The <code>test</code> function is expected to load the saved
+  weights by using the earlier <code>load_weights</code> function and runs 100
+  episodes and returns the average reward.</li>
+
+<li>You can look at the code template given and the comments for more
+  details. It should be noted for the functions argument structure
+  must not be changed.</li>
+
+</ul>
+
+<h2>Output</h2>
+
+
+<p>You can run the code using command <code>python mountain_car.py
+--task [T1/T2] --train [0/1]</code> . If the <code>--train</code> is 0
+the code is not expected to output anything. It should just train the
+agent and save the final weights and plots as <code>T1.npy</code>
+and <code>T1.jpg</code> or <code>T2.npy</code> and <code>T2.jpg</code>
+based on the <code>--task</code> parameter.  Additionally we have
+provided a script (verifyOutput.sh) to verify the output
+behaviour of the code.</p>
+
+
+<h2>Submission</h2>
+
+Create a directory called <code>submission</code> and place the
+following material in it.
+
+<li> Your <code>mountain_car.py</code> file (with the functions filled out).</li>
+<li> The final weights for Task 1 as <code>T1.npy</code> and the final weights for Task 2 as <code>T2.npy</code>.</li>
+<li> Training plots as T1.jpg and T2.jpg for Task 1 and Task 2, respectively.</li>
+<li> A README file describing how to run your code and obtain the plots and training data.</li>
+<li> A report presenting your observations from these experiments
+  (as a pdf file named <code>report.pdf</code>).Also Place the plots in
+  the report and provide accompanying commentary.</li>
+
+<p></p>
+
+<p>Compress the directory into <code>submission.tar.gz</code> and upload
+  on Moodle under Programming Assignment 3.</p>
+
+<p>Convince yourself that the results obtained match your
+  expectations. Feel free to be creative and use the simulation
+  environment to test related hypotheses you might find
+  interesting. Report any particular
+  issues you encountered while experimenting with this task. Don't
+  hesitate to include additional numbers or graphs.</p>
+
+<br>
+<h2>Evaluation</h2>
+
+<p>Each task is for 6 marks, with the marks being determined by the
+  training plot, test runs, and the accompanying observations.</p>
+
+<p>The TAs and instructor may look at your source code and notes to
+  corroborate the results obtained by your program, and may also call
+  you to a face-to-face session to explain your code.</p>
+
+
+<br>
+<h2>Deadline and Rules</h2>
+
+
+<p>Your submission is due by 11.55 p.m., Tuesday, November 2nd. Finish
+  working on your submission well in advance, keeping enough time to
+  validate your code and to upload your submission to Moodle.</p>
+
+<p>Your submission will not be evaluated (and will be given a score of
+  zero) if it is not uploaded to Moodle by the deadline. Do not send
+  your code or report to the instructor or TAs through any other
+  channel. Requests to evaluate late submissions will not be
+  entertained.</p>
+
+<p>Your submission will receive a score of zero if your code does not
+  execute on the cs747 docker container. To make sure you have uploaded the right
+  version, download it and check after submitting (but before the
+  deadline, so you can handle any contingencies before the deadline
+  lapses).</p>
+
+<p>You are expected to comply with the rules laid out in the "Academic
+  Honesty" section on the course web page, failing which you are liable
+  to be reported for academic malpractice.</p>
+
+
+
+
+
+</body></html>
