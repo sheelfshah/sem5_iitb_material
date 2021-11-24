@@ -1,0 +1,26 @@
+19D070052, Sheel Shah, Astable multivibrator
+
+.include all_model_files/zener_B.txt
+.include all_model_files/ua741.txt
+
+** nodes:
+** 1: opamp +, 2: opamp -, 3: opamp out
+** 4 vout, 5 between dz1 dz2
+x1 1 2 10 11 3 ua741
+v_cc1 10 0 12
+v_cc2 11 0 -12
+
+c0 2 0 0.1u
+r0 2 4 10k
+r3 3 4 1k
+x_dz1 4 5 DI_1N4734A
+x_dz2 0 5 DI_1N4734A
+r1 4 1 10k
+r2 1 0 10k
+
+.tran 0.01m 250m 200m
+.control
+run
+plot v(4), v(2)
+.endc
+.end

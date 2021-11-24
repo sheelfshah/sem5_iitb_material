@@ -1,0 +1,18 @@
+Sheel Shah 19D070052 Current Mirror NMOS
+
+.model NM3 nmos Level=1 Vto=1 Kp=100u w=10u L=1u
++ Gamma=0 Phi=0.65 Lambda=0.01
+
+mn1 2 2 0 0 NM3
+mn2 3 2 0 0 NM3
+v_dd 1 0 12
+r1 1 2 8.2k
+v_o 3 0
+
+.dc v_o 1 5 0.2
+.control
+run
+plot -i(v_o)
+plot -i(v_dd)
+.endc
+.end

@@ -1,0 +1,27 @@
+19D070052 Sheel Shah Expt3 CE Amp Biasing
+.model bc547a NPN IS=10f BF=200 ISE=10.3f IKF=50m NE=1.3
++ BR=9.5 VAF=80 IKR=12m ISC=47p NC=2 VAR=10 RB=280 RE=1 RC=40
++ tr=0.3u tf=0.5n cje=12p vje=0.48 mje=0.5 cjc=6p vjc=0.7 mjc=0.33 kf=2f
+** nodes:
+**   1 emitter, 2 base, 3 collector/output
+**   4 Vcc
+q0 3 2 1 bc547a
+re 1 0 1k
+r2 20 0 2.2k
+r1 20 4 10k
+v2 20 2 0
+** to measure Ib
+rc 4 30 1.2k
+v3 30 3 0
+** to measure Ic
+vcc 4 0 12
+.op
+.control
+run
+print v(1)
+print v(2)
+print v(3)
+print i(v2)
+print i(v3)
+.endc
+.end

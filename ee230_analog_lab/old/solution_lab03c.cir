@@ -1,0 +1,34 @@
+19D070052 Sheel Shah Expt3 CE Amp Biasing
+.model bc547a NPN IS=10f BF=200 ISE=10.3f IKF=50m NE=1.3
++ BR=9.5 VAF=80 IKR=12m ISC=47p NC=2 VAR=10 RB=280 RE=1 RC=40
++ tr=0.3u tf=0.5n cje=12p vje=0.48 mje=0.5 cjc=6p vjc=0.7 mjc=0.33 kf=2f
+** nodes:
+**   1 emitter, 2 base, 3 collector
+**   4 Vcc
+**   5 Vin
+**   6 Vout
+q0 3 2 1 bc547a
+vcc 4 0 12
+vin 5 0 dc 0 ac 10m
+rs 5 50 10k
+** rs is changed
+c1 50 2 10u
+re 1 0 1k
+ce 1 0 100u
+r2 2 0 2.2k
+r1 2 4 10k
+rc 4 3 1.2k
+c2 3 6 10u
+rl 6 0 100k
+** rl is changed
+.ac dec 10 10 0.01g
+.control
+run
+let gain = vdb(6) - vdb(5)
+meas ac peak MAX gain
+let f3db = peak/sqrt(2)
+meas ac fl WHEN gain=f3db RISE=1      
+meas ac fh WHEN gain=f3db FALL=1
+plot gain
+.endc
+.end

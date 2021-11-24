@@ -1,0 +1,5 @@
+todos: (in priority)
+	ee677 (30 hrs lecs)
+	hs301 (20 hrs lecs)
+	ee341 (homework probs)
+	ee301 (2hrs lecs)

@@ -1,0 +1,14 @@
+week 13 # cs747 norm
+
+notes_status:
+    cs747: week 11 done
+    ee605: endsem done
+    ee301: week 12 done
+    ee341: module 50 done
+    ee677: week 4 done
+    hs301: week 5 done
+
+lab status:
+    ee230: done
+    ee340: endsem pending
+    ee324: done

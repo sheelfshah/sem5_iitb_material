@@ -1,0 +1,9 @@
+1. split podem.py into several files
+2. change code of each file
+2.1. convert global vars to local onces that are returned and used as args b/w funcs
+3. add comments at top of each function explaining purpose(refer readme.docx)
+4. create instruction pdf
+5. scan code for "todo" and ensure all are done
+6. (optional) implement other gates. only 4 are there now out of 8
+
+netlist.py, gate.py have been done completely
