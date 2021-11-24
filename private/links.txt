@@ -1,8 +1,0 @@
-ee230 analog lab tut quiz: 
-    https://meet.google.com/vjm-skjx-jux?hs=224
-ee605 ecc: 
-    https://drive.google.com/drive/folders/1K5HOg0ZL-3QKF2EQIwzcQ9UBNEs9vvIP
-ee677 cad links:
-    https://docs.google.com/document/d/19E9jwrXLTJIylRfOm5yFd3qx8sRdyVe7_s3cBn9KLN0/edit?usp=drivesdk
-cs747 course page:
-    https://www.cse.iitb.ac.in/~shivaram/teaching/cs747-a2021/index.html

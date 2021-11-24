@@ -1,14 +1,14 @@
-week 13 # cs747 norm
+all over
+605 project pending
+677 project?
 
 notes_status:
-    cs747: week 11 done
-    ee605: endsem done
-    ee301: week 12 done
-    ee341: module 50 done
-    ee677: week 4 done
-    hs301: week 5 done
-
-lab status:
-    ee230: done
-    ee340: endsem pending
-    ee324: done
+    cs747: notes excluding last lecture in thick book
+    ee605: notes till quiz2 in thick book
+    ee301: full notes in sheets
+    ee341: full notes in red book
+    ee677: notes till a little before midsem in red book
+    hs301: notes till midsem in sheets
+    ee230: full notes in sheets
+    ee340: nothing
+    ee324: nothing
